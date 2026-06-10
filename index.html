@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankit Sharma — Frontend Developer</title>
+    <meta name="description" content="Ankit Sharma is a passionate frontend developer who creates clean, modern, and user-friendly websites.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js" defer></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        accent: { DEFAULT: '#6366f1', light: '#818cf8', dark: '#4f46e5', glow: 'rgba(99,102,241,0.3)' },
+                        surface: { 50: '#fafafa', 100: '#f4f4f5', 200: '#e4e4e7', 300: '#d4d4d8', 800: '#1c1c1e', 850: '#151517', 900: '#0f0f11', 950: '#0a0a0c' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Instrument Serif', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Inter',sans-serif;overflow-x:hidden}
+        .dark body,html.dark body{background-color:#0a0a0c;color:#f4f4f5}
+        .light body,html.light body{background-color:#fafafa;color:#18181b}
+
+        ::-webkit-scrollbar{width:5px}
+        ::-webkit-scrollbar-track{background:transparent}
+        .dark ::-webkit-scrollbar-thumb{background:#3f3f46;border-radius:3px}
+        .light ::-webkit-scrollbar-thumb{background:#d4d4d8;border-radius:3px}
+
+        .gradient-text{background:linear-gradient(135deg,#6366f1,#a78bfa,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .glass{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+        .dark .glass{background:rgba(15,15,17,.8);border:1px solid rgba(255,255,255,.08)}
+        .light .glass{background:rgba(255,255,255,.8);border:1px solid rgba(0,0,0,.08)}
+        .dark .card-glow{transition:box-shadow .3s ease,transform .3s ease}
+        .dark .card-glow:hover{box-shadow:0 0 40px rgba(99,102,241,.1),0 20px 50px rgba(0,0,0,.35);transform:translateY(-3px)}
+        .light .card-glow{transition:box-shadow .3s ease,transform .3s ease}
+        .light .card-glow:hover{box-shadow:0 0 40px rgba(99,102,241,.06),0 20px 50px rgba(0,0,0,.05);transform:translateY(-3px)}
+
+        .progress-fill{width:0;transition:width 1.4s cubic-bezier(.25,.46,.45,.94)}
+
+        .bg-grid{background-image:linear-gradient(rgba(99,102,241,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,.04) 1px,transparent 1px);background-size:60px 60px}
+        .light .bg-grid{background-image:linear-gradient(rgba(99,102,241,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,.06) 1px,transparent 1px)}
+
+        /* Reduced float animation — only on elements that won't cause repaint issues */
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+        .float{animation:float 7s ease-in-out infinite;will-change:transform}
+        .float-delay{animation:float 7s ease-in-out 2.5s infinite;will-change:transform}
+
+        /* Pulse indicator */
+        @keyframes pulse-ring{0%{transform:scale(.8);opacity:1}100%{transform:scale(2);opacity:0}}
+        .pulse-ring{animation:pulse-ring 2.2s ease-out infinite}
+
+        .section-divider{height:1px}
+        .dark .section-divider{background:linear-gradient(to right,transparent,rgba(255,255,255,.08),transparent)}
+        .light .section-divider{background:linear-gradient(to right,transparent,rgba(0,0,0,.08),transparent)}
+
+        .toast{transform:translateY(100px);opacity:0;transition:all .35s cubic-bezier(.16,1,.3,1)}
+        .toast.show{transform:translateY(0);opacity:1}
+
+        .dark input,.dark textarea,.dark select{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#f4f4f5;transition:border-color .25s,box-shadow .25s}
+        .dark input:focus,.dark textarea:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+        .light input,.light textarea,.light select{background:rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.12);color:#18181b;transition:border-color .25s,box-shadow .25s}
+        .light input:focus,.light textarea:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+        input::placeholder,textarea::placeholder{opacity:.4}
+
+        .project-overlay{opacity:0;transition:opacity .4s ease}
+        .project-card:hover .project-overlay{opacity:1}
+        .project-card:hover .project-img{transform:scale(1.06)}
+        .project-img{transition:transform .6s cubic-bezier(.25,.8,.25,1)}
+
+        .nav-link{position:relative;transition:opacity .25s ease}
+        .nav-link::after{content:'';position:absolute;bottom:-4px;left:50%;width:0;height:2px;background:#6366f1;transition:width .25s ease,left .25s ease;border-radius:1px}
+        .nav-link:hover::after,.nav-link.active::after{width:100%;left:0}
+
+        .theme-toggle{position:relative;width:56px;height:28px;border-radius:14px;cursor:pointer;transition:background .3s ease}
+        .dark .theme-toggle{background:#27272a}
+        .light .theme-toggle{background:#e4e4e7}
+        .theme-toggle-knob{position:absolute;top:3px;width:22px;height:22px;border-radius:50%;transition:transform .3s cubic-bezier(.68,-.55,.265,1.55),background .3s ease;display:flex;align-items:center;justify-content:center;font-size:12px}
+        .dark .theme-toggle-knob{transform:translateX(3px);background:#6366f1;color:#fff}
+        .light .theme-toggle-knob{transform:translateX(31px);background:#f59e0b;color:#fff}
+
+        .mobile-menu{transform:translateX(100%);transition:transform .35s cubic-bezier(.16,1,.3,1)}
+        .mobile-menu.open{transform:translateX(0)}
+
+        .skill-icon{transition:transform .3s ease,box-shadow .3s ease}
+        .skill-icon:hover{transform:translateY(-5px)}
+        .dark .skill-icon:hover{box-shadow:0 10px 30px rgba(99,102,241,.18)}
+        .light .skill-icon:hover{box-shadow:0 10px 30px rgba(99,102,241,.1)}
+
+        /* Scroll reveal — use CSS class toggling instead of GSAP on every element */
+        .reveal,.reveal-scale,.reveal-left,.reveal-right{opacity:0;transition:opacity .6s ease,transform .6s ease}
+        .reveal{transform:translateY(30px)}
+        .reveal-scale{transform:scale(.93) translateY(16px)}
+        .reveal-left{transform:translateX(-30px)}
+        .reveal-right{transform:translateX(30px)}
+        .revealed{opacity:1!important;transform:none!important}
+
+        /* Gradient border around photo */
+        .photo-frame{position:relative}
+        .photo-frame::before{content:'';position:absolute;inset:-3px;border-radius:1.5rem;background:linear-gradient(135deg,#6366f1,#a78bfa,#c084fc,#6366f1);background-size:300% 300%;animation:grad-rotate 5s ease infinite;z-index:-1}
+        @keyframes grad-rotate{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .live-badge{background:linear-gradient(135deg,#22c55e,#16a34a)}
+
+        /* Page loader */
+        .page-loader{position:fixed;inset:0;z-index:99999;background:#0a0a0c;display:flex;align-items:center;justify-content:center;transition:opacity .5s ease,visibility .5s ease}
+        .page-loader.done{opacity:0;visibility:hidden}
+        .page-loader .dot{width:8px;height:8px;border-radius:50%;background:#6366f1;animation:loader-bounce .6s ease-in-out infinite alternate}
+        .page-loader .dot:nth-child(2){animation-delay:.2s}
+        .page-loader .dot:nth-child(3){animation-delay:.4s}
+        @keyframes loader-bounce{to{transform:translateY(-12px);opacity:.4}}
+        .light .page-loader{background:#fafafa}
+
+        /* Contact action buttons */
+        .contact-actions{display:none}
+        .contact-actions.visible{display:flex}
+
+        /* Reduce motion */
+        @media(prefers-reduced-motion:reduce){
+            *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+            .float,.float-delay,.pulse-ring{animation:none}
+            .reveal,.reveal-scale,.reveal-left,.reveal-right{opacity:1;transform:none}
+        }
+
+        /* Mobile touch friendliness */
+        @media(max-width:768px){
+            .skill-icon:hover{transform:none;box-shadow:none}
+            .card-glow:hover{transform:none}
+        }
+
+        /* Image lazy load fade */
+        img[loading="lazy"]{opacity:0;transition:opacity .4s ease}
+        img[loading="lazy"].loaded{opacity:1}
+    </style>
+</head>
+<body>
+
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <div class="flex items-center gap-2">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl glass text-sm font-medium flex items-center gap-2">
+        <span class="iconify text-green-400" data-icon="mdi:check-circle" data-width="18"></span>
+        <span id="toastMsg">Message sent successfully!</span>
+    </div>
+
+    <!-- NAV -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-40 transition-transform duration-400">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+            <div class="glass rounded-2xl px-4 sm:px-6 py-3 flex items-center justify-between">
+                <a href="#hero" class="flex items-center gap-2 group">
+                    <div class="w-9 h-9 rounded-lg bg-accent flex items-center justify-center text-white font-semibold text-sm transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">A</div>
+                    <span class="font-medium text-sm tracking-tight hidden sm:inline">Ankit<span class="text-accent">.</span></span>
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#about" class="nav-link text-xs font-medium uppercase tracking-widest opacity-60 hover:opacity-100">About</a>
+                    <a href="#skills" class="nav-link text-xs font-medium uppercase tracking-widest opacity-60 hover:opacity-100">Skills</a>
+                    <a href="#projects" class="nav-link text-xs font-medium uppercase tracking-widest opacity-60 hover:opacity-100">Projects</a>
+                    <a href="#contact" class="nav-link text-xs font-medium uppercase tracking-widest opacity-60 hover:opacity-100">Contact</a>
+                </div>
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <div class="theme-toggle" id="themeToggle" aria-label="Toggle theme" role="button" tabindex="0">
+                        <div class="theme-toggle-knob">
+                            <span class="iconify dark-icon" data-icon="mdi:moon-waning-crescent" data-width="14"></span>
+                            <span class="iconify light-icon" data-icon="mdi:white-balance-sunny" data-width="14" style="display:none"></span>
+                        </div>
+                    </div>
+                    <a href="Ankit_Sharma_Resume.pdf" download class="hidden md:flex items-center gap-2 px-4 py-2 bg-accent text-white text-xs font-semibold uppercase tracking-wider rounded-lg hover:bg-accent-dark transition-all duration-300 hover:shadow-md hover:shadow-accent/20">
+                        <span class="iconify" data-icon="mdi:download" data-width="14"></span> Resume
+                    </a>
+                    <button id="menuBtn" class="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-1.5" aria-label="Open menu">
+                        <span class="menu-line w-5 h-0.5 bg-current transition-all duration-300 origin-center"></span>
+                        <span class="menu-line w-5 h-0.5 bg-current transition-all duration-300 origin-center"></span>
+                        <span class="menu-line w-3.5 h-0.5 bg-current transition-all duration-300 self-end origin-center"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-0 z-50">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="menuOverlay"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-72 flex flex-col p-8 pt-20">
+            <div class="dark:bg-surface-950 bg-white h-full rounded-l-3xl p-6 flex flex-col gap-1 shadow-2xl">
+                <a href="#about" class="mobile-nav-link py-3 px-4 text-lg font-light rounded-xl hover:bg-accent/10 transition-colors duration-200">About</a>
+                <a href="#skills" class="mobile-nav-link py-3 px-4 text-lg font-light rounded-xl hover:bg-accent/10 transition-colors duration-200">Skills</a>
+                <a href="#projects" class="mobile-nav-link py-3 px-4 text-lg font-light rounded-xl hover:bg-accent/10 transition-colors duration-200">Projects</a>
+                <a href="#contact" class="mobile-nav-link py-3 px-4 text-lg font-light rounded-xl hover:bg-accent/10 transition-colors duration-200">Contact</a>
+                <div class="mt-auto">
+                    <a href="Ankit_Sharma_Resume.pdf" download class="flex items-center justify-center gap-2 w-full py-3 bg-accent text-white text-sm font-semibold rounded-xl transition-colors duration-200 hover:bg-accent-dark">
+                        <span class="iconify" data-icon="mdi:download" data-width="16"></span> Download Resume
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <section id="hero" class="relative min-h-screen flex items-center bg-grid">
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-15 pointer-events-none" style="background:radial-gradient(circle,rgba(99,102,241,.28),transparent 70%)"></div>
+        <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-32 w-full">
+            <div class="flex flex-col items-center text-center">
+                <div class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs font-medium mb-8">
+                    <span class="relative flex h-2 w-2">
+                        <span class="pulse-ring absolute inline-flex h-full w-full rounded-full bg-green-400"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
+                    </span>
+                    Available for freelance work
+                </div>
+                <h1 class="reveal text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[0.95] mb-4">
+                    <span class="block">Ankit</span>
+                    <span class="block font-serif italic gradient-text">Sharma</span>
+                </h1>
+                <p class="reveal text-base md:text-lg opacity-50 font-light mb-3 tracking-wide">Frontend Developer</p>
+                <p class="reveal text-base md:text-lg font-light max-w-xl mx-auto mb-10 leading-relaxed" style="opacity:.7">I build modern, fast and user-friendly websites that help businesses grow and stand out.</p>
+                <div class="reveal flex flex-col sm:flex-row items-center gap-4">
+                    <a href="#projects" class="group px-8 py-4 bg-accent text-white text-sm font-semibold uppercase tracking-wider rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-accent/25 hover:-translate-y-0.5 active:translate-y-0">
+                        <span class="flex items-center gap-2">View My Work <span class="iconify transition-transform duration-300 group-hover:translate-x-1" data-icon="mdi:arrow-right" data-width="18"></span></span>
+                    </a>
+                    <a href="#contact" class="px-8 py-4 glass text-sm font-semibold uppercase tracking-wider rounded-xl hover:bg-accent/10 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0">Let's Talk</a>
+                </div>
+                <div class="reveal absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30 pointer-events-none">
+                    <span class="text-[10px] uppercase tracking-[0.2em]">Scroll</span>
+                    <div class="w-px h-10 bg-gradient-to-b from-current to-transparent"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider max-w-6xl mx-auto"></div>
+
+    <!-- ABOUT -->
+    <section id="about" class="relative py-20 sm:py-24 md:py-32">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+                <div class="reveal-left relative flex justify-center">
+                    <div class="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80">
+                        <div class="absolute -top-4 -left-4 w-full h-full rounded-3xl border border-accent/20 float"></div>
+                        <div class="photo-frame absolute top-4 left-4 w-full h-full rounded-3xl overflow-hidden">
+                            <img
+                                src="https://z-cdn-media.chatglm.cn/files/8a6e8f1e-116d-4cef-8904-feac77c6fd76.jpeg?auth_key=1875806072-ed06821f742d48e997ffe557eb3ac535-0-40d2b3e007903d95a4e2b150b258c0a0"
+                                alt="Ankit Sharma — Frontend Developer"
+                                width="320" height="320"
+                                class="w-full h-full object-cover object-top"
+                                loading="eager">
+                        </div>
+                        <div class="absolute -bottom-4 -right-4 glass rounded-2xl px-5 py-3 float-delay">
+                            <div class="flex items-center gap-1.5">
+                                <span class="iconify text-green-400" data-icon="mdi:map-marker" data-width="16"></span>
+                                <span class="text-xs font-medium">Uttarakhand</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="reveal-right">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.25em] text-accent">About Me</span>
+                        <h2 class="text-3xl md:text-4xl font-light tracking-tight mt-3 mb-6">Crafting digital experiences<br><span class="font-serif italic gradient-text">that matter</span></h2>
+                    </div>
+                    <div class="reveal-right space-y-4 text-sm leading-relaxed opacity-70 mb-8">
+                        <p>I'm Ankit Sharma, a passionate frontend developer from Uttarakhand, India. I specialize in creating clean, modern, and user-friendly websites that make a real impact.</p>
+                        <p>With a strong foundation in HTML, CSS, JavaScript, and Tailwind CSS, I transform ideas into pixel-perfect digital experiences. I also work with React, Supabase, and modern deployment platforms like Vercel and GitHub Pages.</p>
+                        <p>I focus on building websites that not only look great but also help clients grow their business. Every project is approached with attention to detail, performance optimization, and a deep understanding of user experience.</p>
+                    </div>
+                    <div class="reveal-right grid grid-cols-3 gap-3 sm:gap-4">
+                        <div class="text-center p-3 sm:p-4 rounded-2xl glass transition-transform duration-300 hover:-translate-y-1"><div class="text-xl sm:text-2xl font-bold gradient-text">5+</div><div class="text-[9px] sm:text-[10px] uppercase tracking-wider opacity-50 mt-1">Technologies</div></div>
+                        <div class="text-center p-3 sm:p-4 rounded-2xl glass transition-transform duration-300 hover:-translate-y-1"><div class="text-xl sm:text-2xl font-bold gradient-text">4+</div><div class="text-[9px] sm:text-[10px] uppercase tracking-wider opacity-50 mt-1">Projects</div></div>
+                        <div class="text-center p-3 sm:p-4 rounded-2xl glass transition-transform duration-300 hover:-translate-y-1"><div class="text-xl sm:text-2xl font-bold gradient-text">100%</div><div class="text-[9px] sm:text-[10px] uppercase tracking-wider opacity-50 mt-1">Dedication</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider max-w-6xl mx-auto"></div>
+
+    <!-- SKILLS -->
+    <section id="skills" class="relative py-20 sm:py-24 md:py-32">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-14 sm:mb-16">
+                <span class="reveal text-[10px] font-bold uppercase tracking-[0.25em] text-accent">My Skills</span>
+                <h2 class="reveal text-3xl md:text-4xl font-light tracking-tight mt-3">Technologies & tools <span class="font-serif italic gradient-text">I use</span></h2>
+            </div>
+
+            <!-- Frontend -->
+            <div class="reveal-scale mb-10 sm:mb-12">
+                <div class="flex items-center gap-3 mb-5 sm:mb-6">
+                    <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center"><span class="iconify text-accent" data-icon="mdi:palette-outline" data-width="18"></span></div>
+                    <h3 class="text-sm font-semibold uppercase tracking-wider">Frontend Development</h3>
+                </div>
+                <div class="grid grid-cols-3 sm:grid-cols-5 gap-3 sm:gap-4 skill-grid">
+                    <div class="skill-icon glass rounded-2xl p-4 sm:p-6 flex flex-col items-center gap-2 sm:gap-3 cursor-default">
+                        <span class="iconify text-orange-500" data-icon="mdi:language-html5" data-width="36"></span>
+                        <span class="text-[10px] sm:text-xs font-medium opacity-70">HTML5</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-4 sm:p-6 flex flex-col items-center gap-2 sm:gap-3 cursor-default">
+                        <span class="iconify text-blue-500" data-icon="mdi:language-css3" data-width="36"></span>
+                        <span class="text-[10px] sm:text-xs font-medium opacity-70">CSS3</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-4 sm:p-6 flex flex-col items-center gap-2 sm:gap-3 cursor-default">
+                        <span class="iconify text-yellow-400" data-icon="mdi:language-javascript" data-width="36"></span>
+                        <span class="text-[10px] sm:text-xs font-medium opacity-70">JavaScript</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-4 sm:p-6 flex flex-col items-center gap-2 sm:gap-3 cursor-default">
+                        <span class="iconify text-cyan-400" data-icon="simple-icons:tailwindcss" data-width="36"></span>
+                        <span class="text-[10px] sm:text-xs font-medium opacity-70">Tailwind CSS</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-4 sm:p-6 flex flex-col items-center gap-2 sm:gap-3 cursor-default col-span-3 sm:col-span-1">
+                        <span class="iconify text-green-400" data-icon="simple-icons:supabase" data-width="36"></span>
+                        <span class="text-[10px] sm:text-xs font-medium opacity-70">Supabase</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tools -->
+            <div class="reveal-scale mb-10 sm:mb-12">
+                <div class="flex items-center gap-3 mb-5 sm:mb-6">
+                    <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center"><span class="iconify text-amber-400" data-icon="mdi:wrench-outline" data-width="18"></span></div>
+                    <h3 class="text-sm font-semibold uppercase tracking-wider">Dev Tools & Platforms</h3>
+                </div>
+                <div class="grid grid-cols-3 sm:grid-cols-5 gap-3 sm:gap-4 skill-grid">
+                    <div class="skill-icon glass rounded-2xl p-4 sm:p-6 flex flex-col items-center gap-2 sm:gap-3 cursor-default">
+                        <span class="iconify" data-icon="mdi:github" data-width="36"></span>
+                        <span class="text-[10px] sm:text-xs font-medium opacity-70">GitHub</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-4 sm:p-6 flex flex-col items-center gap-2 sm:gap-3 cursor-default">
+                        <span class="iconify text-blue-400" data-icon="mdi:microsoft-visual-studio-code" data-width="36"></span>
+                        <span class="text-[10px] sm:text-xs font-medium opacity-70">VS Code</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-4 sm:p-6 flex flex-col items-center gap-2 sm:gap-3 cursor-default">
+                        <span class="iconify text-white" data-icon="simple-icons:vercel" data-width="36"></span>
+                        <span class="text-[10px] sm:text-xs font-medium opacity-70">Vercel</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-4 sm:p-6 flex flex-col items-center gap-2 sm:gap-3 cursor-default">
+                        <span class="iconify text-orange-400" data-icon="simple-icons:githubpages" data-width="36"></span>
+                        <span class="text-[10px] sm:text-xs font-medium opacity-70">GitHub Pages</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-4 sm:p-6 flex flex-col items-center gap-2 sm:gap-3 cursor-default col-span-3 sm:col-span-1">
+                        <span class="iconify text-cyan-400" data-icon="mdi:react" data-width="36"></span>
+                        <span class="text-[10px] sm:text-xs font-medium opacity-70">React</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Tools -->
+            <div class="reveal-scale mb-12 sm:mb-16">
+                <div class="flex items-center gap-3 mb-5 sm:mb-6">
+                    <div class="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center"><span class="iconify text-violet-400" data-icon="mdi:robot-outline" data-width="18"></span></div>
+                    <h3 class="text-sm font-semibold uppercase tracking-wider">AI Tools I Use</h3>
+                </div>
+                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3 sm:gap-4 skill-grid">
+                    <div class="skill-icon glass rounded-2xl p-3 sm:p-5 flex flex-col items-center gap-2 cursor-default">
+                        <span class="iconify text-violet-400" data-icon="mdi:robot-excited-outline" data-width="32"></span>
+                        <span class="text-[10px] font-medium opacity-70 text-center">Antigravity</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-3 sm:p-5 flex flex-col items-center gap-2 cursor-default">
+                        <span class="iconify text-indigo-400" data-icon="mdi:auto-fix" data-width="32"></span>
+                        <span class="text-[10px] font-medium opacity-70 text-center">Kiro</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-3 sm:p-5 flex flex-col items-center gap-2 cursor-default">
+                        <span class="iconify text-pink-400" data-icon="mdi:heart-flash" data-width="32"></span>
+                        <span class="text-[10px] font-medium opacity-70 text-center">Lovable</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-3 sm:p-5 flex flex-col items-center gap-2 cursor-default">
+                        <span class="iconify text-blue-300" data-icon="mdi:needle" data-width="32"></span>
+                        <span class="text-[10px] font-medium opacity-70 text-center">Stitch</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-3 sm:p-5 flex flex-col items-center gap-2 cursor-default">
+                        <span class="iconify text-blue-500" data-icon="simple-icons:google" data-width="32"></span>
+                        <span class="text-[10px] font-medium opacity-70 text-center">Google AI Studio</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-3 sm:p-5 flex flex-col items-center gap-2 cursor-default">
+                        <span class="iconify text-green-400" data-icon="simple-icons:openai" data-width="32"></span>
+                        <span class="text-[10px] font-medium opacity-70 text-center">ChatGPT</span>
+                    </div>
+                    <div class="skill-icon glass rounded-2xl p-3 sm:p-5 flex flex-col items-center gap-2 cursor-default col-span-3 sm:col-span-1">
+                        <span class="iconify text-teal-400" data-icon="mdi:wind-power-outline" data-width="32"></span>
+                        <span class="text-[10px] font-medium opacity-70 text-center">Windsurf</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress bars — kept for HTML/CSS/JS/Tailwind only -->
+            <div class="max-w-2xl mx-auto space-y-5 sm:space-y-6">
+                <div class="reveal"><div class="flex justify-between mb-2"><span class="text-sm font-medium">HTML & CSS</span><span class="text-xs font-mono opacity-50">95%</span></div><div class="h-1.5 rounded-full dark:bg-white/5 bg-black/5 overflow-hidden"><div class="progress-fill h-full rounded-full bg-gradient-to-r from-orange-400 to-orange-500" data-width="95"></div></div></div>
+                <div class="reveal"><div class="flex justify-between mb-2"><span class="text-sm font-medium">JavaScript</span><span class="text-xs font-mono opacity-50">80%</span></div><div class="h-1.5 rounded-full dark:bg-white/5 bg-black/5 overflow-hidden"><div class="progress-fill h-full rounded-full bg-gradient-to-r from-yellow-400 to-yellow-500" data-width="80"></div></div></div>
+                <div class="reveal"><div class="flex justify-between mb-2"><span class="text-sm font-medium">Tailwind CSS</span><span class="text-xs font-mono opacity-50">90%</span></div><div class="h-1.5 rounded-full dark:bg-white/5 bg-black/5 overflow-hidden"><div class="progress-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-cyan-500" data-width="90"></div></div></div>
+                <div class="reveal"><div class="flex justify-between mb-2"><span class="text-sm font-medium">Supabase & Vercel</span><span class="text-xs font-mono opacity-50">75%</span></div><div class="h-1.5 rounded-full dark:bg-white/5 bg-black/5 overflow-hidden"><div class="progress-fill h-full rounded-full bg-gradient-to-r from-green-400 to-emerald-500" data-width="75"></div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider max-w-6xl mx-auto"></div>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="relative py-20 sm:py-24 md:py-32">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-14 sm:mb-16">
+                <span class="reveal text-[10px] font-bold uppercase tracking-[0.25em] text-accent">Portfolio</span>
+                <h2 class="reveal text-3xl md:text-4xl font-light tracking-tight mt-3">Featured <span class="font-serif italic gradient-text">Projects</span></h2>
+                <p class="reveal text-sm opacity-50 mt-3 max-w-md mx-auto">A selection of my work showcasing clean design and modern development practices.</p>
+            </div>
+            <div class="space-y-6 sm:space-y-8">
+
+                <!-- P1 — RIDE INDIA -->
+                <div class="reveal project-card group card-glow glass rounded-2xl sm:rounded-3xl overflow-hidden">
+                    <div class="flex flex-col md:grid md:grid-cols-2">
+                        <div class="relative overflow-hidden aspect-[16/9] md:aspect-auto min-h-[200px]">
+                            <img
+                                src="ride india.png"
+                                alt="Ride India — Bike & Scooty Rental Website"
+                                width="600" height="400"
+                                class="project-img w-full h-full object-cover"
+                                loading="lazy">
+                            <div class="project-overlay absolute inset-0 bg-accent/20 flex items-center justify-center">
+                                <a href="https://ride-india.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-white text-black text-xs font-semibold uppercase tracking-wider rounded-lg hover:scale-105 transition-transform duration-200">Live Demo</a>
+                            </div>
+                            <div class="absolute top-3 left-3 sm:top-4 sm:left-4 flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full live-badge text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">
+                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Live
+                            </div>
+                        </div>
+                        <div class="p-6 sm:p-8 md:p-10 flex flex-col justify-center">
+                            <div class="flex flex-wrap items-center gap-2 mb-3">
+                                <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent rounded-full">Web App</span>
+                                <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-green-500/10 text-green-400 rounded-full">Live</span>
+                            </div>
+                            <h3 class="text-lg sm:text-xl md:text-2xl font-light tracking-tight mb-3">Ride India — Bike &amp; Scooty Rental Website</h3>
+                            <p class="text-xs sm:text-sm opacity-60 leading-relaxed mb-4">A complete bike and scooty rental platform serving 50+ cities across India. Features vehicle browsing, rental policies, transparent pricing, and a clean dark-themed responsive UI.</p>
+                            <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-5 sm:mb-6">
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">HTML</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">CSS</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">JavaScript</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">Vercel</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <a href="https://ride-india.vercel.app/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-accent-light transition-colors group/link">
+                                    Live Demo <span class="iconify transition-transform duration-300 group-hover/link:translate-x-1" data-icon="mdi:arrow-top-right" data-width="16"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- P2 — CITY SKIN CLINIC -->
+                <div class="reveal project-card group card-glow glass rounded-2xl sm:rounded-3xl overflow-hidden">
+                    <div class="flex flex-col md:grid md:grid-cols-2">
+                        <div class="relative overflow-hidden aspect-[16/9] md:aspect-auto min-h-[200px]">
+                            <img
+                                src="city clean clinic.png"
+                                alt="City Skin Clinic — Dermatology Clinic Website"
+                                width="600" height="400"
+                                class="project-img w-full h-full object-cover"
+                                loading="lazy">
+                            <div class="project-overlay absolute inset-0 bg-accent/20 flex items-center justify-center">
+                                <a href="https://city-clean-clinic.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-white text-black text-xs font-semibold uppercase tracking-wider rounded-lg hover:scale-105 transition-transform duration-200">Live Demo</a>
+                            </div>
+                            <div class="absolute top-3 left-3 sm:top-4 sm:left-4 flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full live-badge text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">
+                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Live
+                            </div>
+                        </div>
+                        <div class="p-6 sm:p-8 md:p-10 flex flex-col justify-center">
+                            <div class="flex flex-wrap items-center gap-2 mb-3">
+                                <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent rounded-full">Website</span>
+                                <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-green-500/10 text-green-400 rounded-full">Live</span>
+                            </div>
+                            <h3 class="text-lg sm:text-xl md:text-2xl font-light tracking-tight mb-3">City Skin Clinic — Dermatology Clinic Website</h3>
+                            <p class="text-xs sm:text-sm opacity-60 leading-relaxed mb-4">Professional dermatology clinic website featuring modern glassmorphism UI, smooth scroll animations, service listings, appointment info, and fully responsive layout built for skin care businesses.</p>
+                            <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-5 sm:mb-6">
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">HTML</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">CSS</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">JavaScript</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">Tailwind</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">Vercel</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <a href="https://city-clean-clinic.vercel.app/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-accent-light transition-colors group/link">
+                                    Live Demo <span class="iconify transition-transform duration-300 group-hover/link:translate-x-1" data-icon="mdi:arrow-top-right" data-width="16"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- P3 — LUXERA -->
+                <div class="reveal project-card group card-glow glass rounded-2xl sm:rounded-3xl overflow-hidden">
+                    <div class="flex flex-col md:grid md:grid-cols-2">
+                        <div class="relative overflow-hidden aspect-[16/9] md:aspect-auto min-h-[200px]">
+                            <img
+                                src="luxera.png"
+                                alt="LUXERA — Luxury Beauty Brand Website"
+                                width="600" height="400"
+                                class="project-img w-full h-full object-cover"
+                                loading="lazy">
+                            <div class="project-overlay absolute inset-0 bg-accent/20 flex items-center justify-center">
+                                <a href="https://luxera-lilac.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-white text-black text-xs font-semibold uppercase tracking-wider rounded-lg hover:scale-105 transition-transform duration-200">Live Demo</a>
+                            </div>
+                            <div class="absolute top-3 left-3 sm:top-4 sm:left-4 flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full live-badge text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">
+                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Live
+                            </div>
+                        </div>
+                        <div class="p-6 sm:p-8 md:p-10 flex flex-col justify-center">
+                            <div class="flex flex-wrap items-center gap-2 mb-3">
+                                <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent rounded-full">Website</span>
+                                <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-green-500/10 text-green-400 rounded-full">Live</span>
+                            </div>
+                            <h3 class="text-lg sm:text-xl md:text-2xl font-light tracking-tight mb-3">LUXERA — Luxury Beauty Brand Website</h3>
+                            <p class="text-xs sm:text-sm opacity-60 leading-relaxed mb-4">Elegant luxury beauty brand website with premium typography, smooth scroll interactions, dark theme aesthetic, and high-end visual design crafted to convey sophistication and brand identity.</p>
+                            <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-5 sm:mb-6">
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">HTML</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">CSS</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">JavaScript</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">Vercel</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <a href="https://luxera-lilac.vercel.app/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-accent-light transition-colors group/link">
+                                    Live Demo <span class="iconify transition-transform duration-300 group-hover/link:translate-x-1" data-icon="mdi:arrow-top-right" data-width="16"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- P4 — STYLE SUPREME SHOP -->
+                <div class="reveal project-card group card-glow glass rounded-2xl sm:rounded-3xl overflow-hidden">
+                    <div class="flex flex-col md:grid md:grid-cols-2">
+                        <div class="relative overflow-hidden aspect-[16/9] md:aspect-auto min-h-[200px]">
+                            <img
+                                src="ecommerce.png"
+                                alt="Style Supreme Shop — Full Stack E-commerce Web App"
+                                width="600" height="400"
+                                class="project-img w-full h-full object-cover"
+                                loading="lazy">
+                            <div class="project-overlay absolute inset-0 bg-accent/20 flex items-center justify-center">
+                                <a href="https://style-supreme-shop.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-white text-black text-xs font-semibold uppercase tracking-wider rounded-lg hover:scale-105 transition-transform duration-200">Live Demo</a>
+                            </div>
+                            <div class="absolute top-3 left-3 sm:top-4 sm:left-4 flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full live-badge text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">
+                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Live
+                            </div>
+                        </div>
+                        <div class="p-6 sm:p-8 md:p-10 flex flex-col justify-center">
+                            <div class="flex flex-wrap items-center gap-2 mb-3">
+                                <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-accent/10 text-accent rounded-full">Full Stack</span>
+                                <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-green-500/10 text-green-400 rounded-full">Live</span>
+                            </div>
+                            <h3 class="text-lg sm:text-xl md:text-2xl font-light tracking-tight mb-3">Style Supreme Shop — Full Stack E-commerce Web App</h3>
+                            <p class="text-xs sm:text-sm opacity-60 leading-relaxed mb-4">Responsive e-commerce web application with product listing, cart, checkout, authentication, admin panel, order management, and Supabase database integration.</p>
+                            <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-5 sm:mb-6">
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">React</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">TypeScript</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">Supabase</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">Vercel</span>
+                                <span class="text-[10px] font-mono dark:bg-white/5 bg-black/5 px-2.5 py-1 rounded-lg opacity-70">AI-assisted</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <a href="https://style-supreme-shop.vercel.app/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-accent-light transition-colors group/link">
+                                    Live Demo <span class="iconify transition-transform duration-300 group-hover/link:translate-x-1" data-icon="mdi:arrow-top-right" data-width="16"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider max-w-6xl mx-auto"></div>
+
+    <!-- CONTACT -->
+    <section id="contact" class="relative py-20 sm:py-24 md:py-32">
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[400px] h-[400px] rounded-full opacity-08 pointer-events-none" style="background:radial-gradient(circle,rgba(99,102,241,.3),transparent 70%)"></div>
+        <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-14 sm:mb-16">
+                <span class="reveal text-[10px] font-bold uppercase tracking-[0.25em] text-accent">Get In Touch</span>
+                <h2 class="reveal text-3xl md:text-4xl font-light tracking-tight mt-3">Let's work <span class="font-serif italic gradient-text">together</span></h2>
+                <p class="reveal text-sm opacity-50 mt-3 max-w-md mx-auto">Have a project in mind? I'd love to hear about it.</p>
+            </div>
+            <div class="grid md:grid-cols-5 gap-8 md:gap-10">
+                <!-- Contact Info -->
+                <div class="md:col-span-2 space-y-4 sm:space-y-5">
+                    <a href="mailto:as8557148@gmail.com" class="reveal glass rounded-2xl p-5 sm:p-6 flex items-start gap-4 card-glow block">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0"><span class="iconify text-accent" data-icon="mdi:email-outline" data-width="20"></span></div>
+                        <div><div class="text-[10px] uppercase tracking-wider opacity-50 mb-1">Email</div><span class="text-sm font-medium break-all">as8557148@gmail.com</span></div>
+                    </a>
+                    <a href="https://wa.me/919068001214" target="_blank" rel="noopener noreferrer" class="reveal glass rounded-2xl p-5 sm:p-6 flex items-start gap-4 card-glow block">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-green-500/10 flex items-center justify-center flex-shrink-0"><span class="iconify text-green-400" data-icon="mdi:whatsapp" data-width="20"></span></div>
+                        <div><div class="text-[10px] uppercase tracking-wider opacity-50 mb-1">WhatsApp</div><span class="text-sm font-medium">+91 9068001214</span></div>
+                    </a>
+                    <a href="tel:+919068001214" class="reveal glass rounded-2xl p-5 sm:p-6 flex items-start gap-4 card-glow block">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0"><span class="iconify text-accent" data-icon="mdi:phone-outline" data-width="20"></span></div>
+                        <div><div class="text-[10px] uppercase tracking-wider opacity-50 mb-1">Phone</div><span class="text-sm font-medium">+91 9068001214</span></div>
+                    </a>
+                    <div class="reveal glass rounded-2xl p-5 sm:p-6 flex items-start gap-4 card-glow">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0"><span class="iconify text-accent" data-icon="mdi:map-marker-outline" data-width="20"></span></div>
+                        <div><div class="text-[10px] uppercase tracking-wider opacity-50 mb-1">Location</div><p class="text-sm font-medium">Uttarakhand, India</p></div>
+                    </div>
+                    <div class="reveal flex items-center gap-3 pt-1">
+                        <a href="https://github.com/omii0408" target="_blank" rel="noopener noreferrer" class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl glass flex items-center justify-center hover:bg-accent/10 transition-colors duration-200 hover:scale-110" aria-label="GitHub"><span class="iconify opacity-60" data-icon="mdi:github" data-width="20"></span></a>
+                        <a href="https://www.instagram.com/ankito_here/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl glass flex items-center justify-center hover:bg-accent/10 transition-colors duration-200 hover:scale-110" aria-label="Instagram"><span class="iconify opacity-60" data-icon="mdi:instagram" data-width="20"></span></a>
+                        <a href="https://wa.me/919068001214" target="_blank" rel="noopener noreferrer" class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl glass flex items-center justify-center hover:bg-green-500/10 transition-colors duration-200 hover:scale-110" aria-label="WhatsApp"><span class="iconify text-green-400 opacity-60" data-icon="mdi:whatsapp" data-width="20"></span></a>
+                        <a href="mailto:as8557148@gmail.com" class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl glass flex items-center justify-center hover:bg-accent/10 transition-colors duration-200 hover:scale-110" aria-label="Email"><span class="iconify opacity-60" data-icon="mdi:email-outline" data-width="20"></span></a>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="md:col-span-3">
+                    <form id="contactForm" class="reveal glass rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 space-y-4 sm:space-y-5 card-glow" novalidate>
+                        <div class="grid sm:grid-cols-2 gap-4 sm:gap-5">
+                            <div>
+                                <label class="text-[10px] font-bold uppercase tracking-wider opacity-50 mb-2 block" for="nameInput">Your Name *</label>
+                                <input type="text" id="nameInput" placeholder="John Doe" required autocomplete="name" class="w-full px-4 py-3 rounded-xl text-sm outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold uppercase tracking-wider opacity-50 mb-2 block" for="emailInput">Your Email *</label>
+                                <input type="email" id="emailInput" placeholder="john@example.com" required autocomplete="email" class="w-full px-4 py-3 rounded-xl text-sm outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold uppercase tracking-wider opacity-50 mb-2 block" for="subjectInput">Subject</label>
+                            <input type="text" id="subjectInput" placeholder="Project inquiry" autocomplete="off" class="w-full px-4 py-3 rounded-xl text-sm outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold uppercase tracking-wider opacity-50 mb-2 block" for="messageInput">Message *</label>
+                            <textarea id="messageInput" rows="5" placeholder="Tell me about your project..." required class="w-full px-4 py-3 rounded-xl text-sm outline-none resize-none"></textarea>
+                        </div>
+                        <button type="submit" id="submitBtn" class="w-full py-4 bg-accent text-white text-sm font-semibold uppercase tracking-wider rounded-xl hover:bg-accent-dark transition-all duration-300 hover:shadow-lg hover:shadow-accent/25 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
+                            <span id="btnText">Send Message</span>
+                            <span id="btnLoader" class="hidden"><span class="iconify animate-spin" data-icon="mdi:loading" data-width="18"></span></span>
+                            <span class="iconify" data-icon="mdi:send" data-width="16" id="btnIcon"></span>
+                        </button>
+
+                        <!-- Send action buttons — shown after validation -->
+                        <div id="contactActions" class="contact-actions flex-col sm:flex-row gap-3 pt-1">
+                            <a id="waLink" href="#" target="_blank" rel="noopener noreferrer"
+                               class="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-xl transition-colors duration-200">
+                                <span class="iconify" data-icon="mdi:whatsapp" data-width="18"></span>
+                                Send on WhatsApp
+                            </a>
+                            <a id="mailLink" href="#"
+                               class="flex-1 flex items-center justify-center gap-2 py-3 px-4 glass border border-accent/30 text-sm font-semibold rounded-xl hover:bg-accent/10 transition-colors duration-200">
+                                <span class="iconify text-accent" data-icon="mdi:email-outline" data-width="18"></span>
+                                Send via Email
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="relative py-10 sm:py-12 border-t dark:border-white/5 border-black/5">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-accent flex items-center justify-center text-white font-semibold text-xs">A</div>
+                    <span class="text-sm font-medium">Ankit Sharma</span>
+                </div>
+                <p class="text-[11px] sm:text-xs opacity-40 text-center">&copy; <span id="year"></span> Ankit Sharma. All rights reserved. Built with ♥ in Uttarakhand</p>
+                <div class="flex items-center gap-4">
+                    <a href="https://github.com/omii0408" target="_blank" rel="noopener noreferrer" class="opacity-40 hover:opacity-100 transition-opacity" aria-label="GitHub"><span class="iconify" data-icon="mdi:github" data-width="20"></span></a>
+                    <a href="https://www.instagram.com/ankito_here/" target="_blank" rel="noopener noreferrer" class="opacity-40 hover:opacity-100 transition-opacity" aria-label="Instagram"><span class="iconify" data-icon="mdi:instagram" data-width="20"></span></a>
+                    <a href="https://wa.me/919068001214" target="_blank" rel="noopener noreferrer" class="opacity-40 hover:opacity-100 transition-opacity" aria-label="WhatsApp"><span class="iconify" data-icon="mdi:whatsapp" data-width="20"></span></a>
+                    <a href="mailto:as8557148@gmail.com" class="opacity-40 hover:opacity-100 transition-opacity" aria-label="Email"><span class="iconify" data-icon="mdi:email-outline" data-width="20"></span></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* ===== PAGE LOADER ===== */
+        window.addEventListener('load', () => {
+            setTimeout(() => { document.getElementById('pageLoader').classList.add('done'); }, 350);
+        });
+
+        /* ===== THEME ===== */
+        const root = document.documentElement;
+        const themeToggle = document.getElementById('themeToggle');
+        const darkIcons = document.querySelectorAll('.dark-icon');
+        const lightIcons = document.querySelectorAll('.light-icon');
+
+        function setTheme(t) {
+            root.classList.remove('dark', 'light');
+            root.classList.add(t);
+            localStorage.setItem('theme', t);
+            darkIcons.forEach(i => i.style.display = t === 'dark' ? '' : 'none');
+            lightIcons.forEach(i => i.style.display = t === 'light' ? '' : 'none');
+        }
+        setTheme(localStorage.getItem('theme') || 'dark');
+        themeToggle.addEventListener('click', () => setTheme(root.classList.contains('dark') ? 'light' : 'dark'));
+        themeToggle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); themeToggle.click(); } });
+
+        /* ===== MOBILE MENU ===== */
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        let menuOpen = false;
+
+        function toggleMenu() {
+            menuOpen = !menuOpen;
+            mobileMenu.classList.toggle('open', menuOpen);
+            document.body.style.overflow = menuOpen ? 'hidden' : '';
+            const lines = menuBtn.querySelectorAll('.menu-line');
+            if (menuOpen) {
+                lines[0].style.transform = 'rotate(45deg) translate(3px, 3px)';
+                lines[1].style.opacity = '0';
+                lines[2].style.transform = 'rotate(-45deg) translate(3px, -3px)';
+                lines[2].style.width = '20px';
+            } else {
+                lines[0].style.transform = '';
+                lines[1].style.opacity = '';
+                lines[2].style.transform = '';
+                lines[2].style.width = '';
+            }
+        }
+        menuBtn.addEventListener('click', toggleMenu);
+        menuOverlay.addEventListener('click', () => { if (menuOpen) toggleMenu(); });
+        document.querySelectorAll('.mobile-nav-link').forEach(l => l.addEventListener('click', () => { if (menuOpen) toggleMenu(); }));
+
+        /* ===== INTERSECTION OBSERVER — replaces heavy GSAP ScrollTrigger ===== */
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Stagger children of skill-grid
+                    entry.target.querySelectorAll('.skill-icon').forEach((icon, i) => {
+                        icon.style.transitionDelay = (i * 0.06) + 's';
+                    });
+                    entry.target.classList.add('revealed');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        /* ===== PROGRESS BARS ===== */
+        const progressObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.width = entry.target.getAttribute('data-width') + '%';
+                    progressObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.progress-fill').forEach(bar => progressObserver.observe(bar));
+
+        /* ===== LAZY IMAGE LOAD ===== */
+        document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+            if (img.complete) {
+                img.classList.add('loaded');
+            } else {
+                img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
+            }
+        });
+
+        /* ===== NAVBAR HIDE ON SCROLL DOWN ===== */
+        let lastScroll = 0;
+        let navTicking = false;
+        const navbar = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            if (!navTicking) {
+                requestAnimationFrame(() => {
+                    const s = window.scrollY;
+                    navbar.style.transform = (s > 100 && s > lastScroll) ? 'translateY(-100%)' : 'translateY(0)';
+                    lastScroll = s;
+                    navTicking = false;
+                });
+                navTicking = true;
+            }
+        }, { passive: true });
+
+        /* ===== ACTIVE NAV LINK ===== */
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        let navActiveTicking = false;
+
+        window.addEventListener('scroll', () => {
+            if (!navActiveTicking) {
+                requestAnimationFrame(() => {
+                    let current = '';
+                    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+                    navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+                    navActiveTicking = false;
+                });
+                navActiveTicking = true;
+            }
+        }, { passive: true });
+
+        /* ===== SMOOTH SCROLL ===== */
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function (e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+                }
+            });
+        });
+
+        /* ===== CONTACT FORM — WhatsApp + Email ===== */
+        const contactForm = document.getElementById('contactForm');
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMsg');
+        const btnText = document.getElementById('btnText');
+        const btnLoader = document.getElementById('btnLoader');
+        const btnIcon = document.getElementById('btnIcon');
+        const submitBtn = document.getElementById('submitBtn');
+        const contactActions = document.getElementById('contactActions');
+        const waLink = document.getElementById('waLink');
+        const mailLink = document.getElementById('mailLink');
+
+        function showToast(msg, isError = false) {
+            toastMsg.textContent = msg;
+            const ic = toast.querySelector('.iconify');
+            ic.setAttribute('data-icon', isError ? 'mdi:alert-circle' : 'mdi:check-circle');
+            ic.className = isError ? 'iconify text-red-400' : 'iconify text-green-400';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        contactForm.addEventListener('submit', e => {
+            e.preventDefault();
+
+            const name    = document.getElementById('nameInput').value.trim();
+            const email   = document.getElementById('emailInput').value.trim();
+            const subject = document.getElementById('subjectInput').value.trim() || 'Portfolio Inquiry';
+            const message = document.getElementById('messageInput').value.trim();
+
+            // Validation
+            if (!name)    { showToast('Please enter your name.', true); return; }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('Please enter a valid email.', true); return; }
+            if (!message) { showToast('Please enter your message.', true); return; }
+
+            // Build WhatsApp message
+            const waText = `Hello Ankit! 👋\n\nName: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`;
+            const waURL  = 'https://wa.me/919068001214?text=' + encodeURIComponent(waText);
+
+            // Build mailto link
+            const mailBody  = `Name: ${name}\nEmail: ${email}\n\n${message}`;
+            const mailURL   = `mailto:as8557148@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailBody)}`;
+
+            // Update action links
+            waLink.href   = waURL;
+            mailLink.href = mailURL;
+
+            // Show loading state briefly
+            btnText.textContent = 'Done!';
+            btnLoader.classList.add('hidden');
+            btnIcon.classList.remove('hidden');
+            submitBtn.disabled = true;
+
+            // Show action buttons
+            contactActions.classList.add('visible');
+            showToast('Ready to send! Choose WhatsApp or Email below.');
+
+            // Auto-open WhatsApp
+            setTimeout(() => { window.open(waURL, '_blank', 'noopener,noreferrer'); }, 300);
+
+            // Reset form + button after a delay
+            setTimeout(() => {
+                btnText.textContent = 'Send Message';
+                submitBtn.disabled = false;
+                contactForm.reset();
+                contactActions.classList.remove('visible');
+            }, 8000);
+        });
+
+        /* ===== YEAR ===== */
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
